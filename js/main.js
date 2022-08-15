@@ -89,10 +89,11 @@ class Helper extends Player{
     }
     helperBoost () {
         this.lvl += 1;
-        this.dmg += Math.round((1.5 * (this.lvl * 2 )));
+        this.dmg = this.dmg * 2;
 
         newPlayer.gold += - this.price;
-        this.price += Math.round((3 * ((this.lvl * 5))));
+        this.gold = this.gold * 2;
+        this.price = this.price * 2;
         
         newPlayer.mainPlayer();
         this.mainHelper();
@@ -107,7 +108,7 @@ class Helper extends Player{
 const newEnemy = new Enemy (100 , 0 , 100);
 newEnemy.mainEnemy();
 
-const newPlayer = new Player (1, 1, 0, 10);
+const newPlayer = new Player (1, 1, 1000, 10);
 newPlayer.mainPlayer();
 
 const newHelper0 = new Helper (0, 250,   25,  1000, 0);
@@ -136,7 +137,6 @@ function helperTick () {
             newPlayer.gold += + array[i].gold;
             newPlayer.mainPlayer();
             newEnemy.mainEnemy();
-            console.log(newPlayer.gold);
         }
     }
 }
