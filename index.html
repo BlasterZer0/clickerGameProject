@@ -30,53 +30,54 @@
 
   <div class="container bg-light">
     <div class="row mt-3">
+      <!--Buff-->
       <div class="col-4 mt-3">
         <div class="row">
           <div class="col text-center">
             <img src="images/profile/dwarf-gd98932ba4_640.png" alt="enemy" class="img-fluid w-50 img-thumbnail">
-            <p id="sName">Damage x2</p>
+            <p id="dmgx2Name">Damage x2</p>
           </div>
           <div class="col">
-            <p id="sTime">Duration 00</p>
-            <button type="button" class="btn btn-outline-primary" id="sPrice">Price 10000</button>
+            <p id="dmgx2Time"></p>
+            <button type="button" class="btn btn-outline-primary" id="dmgx2Price"></button>
           </div>
         </div>
 
         <div class="row">
           <div class="col text-center">
             <img src="images/profile/dwarf-gd98932ba4_640.png" alt="enemy" class="img-fluid w-50 img-thumbnail">
-            <p id="sName">Gold x2</p>
+            <p id="goldx2Name">Gold x2</p>
           </div>
           <div class="col">
-            <p id="sTime">Duration 00</p>
-            <button type="button" class="btn btn-outline-primary" id="sPrice">Price 10000</button>
+            <p id="goldx2Time"></p>
+            <button type="button" class="btn btn-outline-primary" id="goldx2Price">Price 10000</button>
           </div>
         </div>
 
         <div class="row">
           <div class="col text-center">
             <img src="images/profile/dwarf-gd98932ba4_640.png" alt="enemy" class="img-fluid w-50 img-thumbnail">
-            <p id="sName">Auto Click</p>
+            <p id="autox2Name">Auto Click</p>
           </div>
           <div class="col">
-            <p id="sTime">Duration 00</p>
-            <button type="button" class="btn btn-outline-primary" id="sPrice">Price 10000</button>
+            <p id="autox2Time"></p>
+            <button type="button" class="btn btn-outline-primary" id="autox2Price">Price 10000</button>
           </div>
         </div>
 
         <div class="row">
           <div class="col text-center">
             <img src="images/profile/dwarf-gd98932ba4_640.png" alt="enemy" class="img-fluid w-50 img-thumbnail">
-            <p id="sName">Duration x2</p>
+            <p id="durationx2Name">Duration x2</p>
           </div>
           <div class="col">
-            <p id="sTime">Duration 00</p>
-            <button type="button" class="btn btn-outline-primary" id="sPrice">Price 10000</button>
+            <p id="durationx2Time"></p>
+            <button type="button" class="btn btn-outline-primary" id="durationx2Price">Price 10000</button>
           </div>
         </div>
-
       </div>
       
+      <!--Player & Enemy-->
       <div class="col-4 text-center">
         <div>
             <p id="hp" style="margin:0"></p>
@@ -99,7 +100,8 @@
           </div>
         </div>
       </div>   
-
+      
+      <!--Helpers-->
       <div class="col-4 mt-3">
         <div class="row">
           <div class="col text-center">
@@ -108,6 +110,7 @@
           </div>
           <div class="col">
             <p id="hDmg0"></p>
+            <p id="hGold0"></p>
             <button type="button" class="btn btn-outline-primary" id="hPrice0"></button>
           </div>
         </div>
@@ -119,6 +122,7 @@
           </div>
           <div class="col">
             <p id="hDmg1"></p>
+            <p id="hGold1"></p>
             <button type="button" class="btn btn-outline-primary" id="hPrice1"></button>
           </div>
         </div>
@@ -130,6 +134,7 @@
           </div>
           <div class="col">
             <p id="hDmg2"></p>
+            <p id="hGold2"></p>
             <button type="button" class="btn btn-outline-primary" id="hPrice2"></button>
           </div>
         </div>
@@ -141,6 +146,7 @@
           </div>
           <div class="col">
             <p id="hDmg3"></p>
+            <p id="hGold3"></p>
             <button type="button" class="btn btn-outline-primary" id="hPrice3"></button>
           </div>
         </div>
@@ -155,36 +161,3 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>
-
-<!-- 
-  <div class="container d-flex justify-content-center align-items-center min-vh-100 min-vw-100">
-    <div class="row">
-      <div class="col-4 bg-light">
-        <div class="d-flex justify-content-center">
-            <img src="images/profile/barbarian-g5962673dd_640.png" alt="enemy" class="img-fluid w-25 p-3 img-thumbnail">
-        </div>
-        <div class="text-center">
-            <h2>Player</h2> 
-            <p id="lvl">Level = 1</p>
-            <p id="gold">Gold = 0</p>
-            <p id="dmg">Damage = 1</p>
-            <p id="price">Price = 10</p>
-            <button type="button" class="btn btn-outline-success" id="buylvl">Level Up</button>
-        </div>
-      </div>
-      <div class="col-8">
-        <div class="text-center">
-            <p id="hp"></p>
-        </div>
-        <div class="d-flex flex-grow-1 justify-content-center align-items-center min-vh-50 min-vw-50">
-            <img src="images/enemy/pngwing.com.png" alt="enemy" class="img-fluid w-25 p-3">
-        </div>
-        <div class="text-center">
-            <p id="enemy">Enemy 1</p>
-            <button type="button" class="btn btn-danger" id="attack">Attack</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
--->
