@@ -15,10 +15,13 @@ class Enemy {
     }
     restoreLife () {
         if (this.life <= 0) {
-            this.restore += Math.round((this.restore / 2) * 0.3);
+            this.restore += Math.round(((this.restore) / 2) * 0.35);
             this.life = this.restore;
             this.stage++;
             this.mainEnemy();
+            if (this.stage == 50) { 
+                this.restore *= 2;
+            }
         }
     }
 }
@@ -94,7 +97,7 @@ class Helper extends Player{
 
         newPlayer.gold -= this.price;
         this.gold = this.gold * 2;
-        this.price = this.price * 2;
+        this.price = this.price * 3;
         
         newPlayer.mainPlayer();
         this.mainHelper();
@@ -104,6 +107,17 @@ class Helper extends Player{
             array[i].mainHelper();
         }
     }
+    static helperTickDmg () {
+        for (let i = 0; i < 4; i++) {
+            if (array[i].lvl > 0) {
+                newEnemy.life -= array[i].dmg;
+                newPlayer.gold += array[i].gold;
+                newPlayer.mainPlayer();
+                newEnemy.mainEnemy();
+            }
+        }
+        Helper.helperLoop();
+    }
 }
 
 const newEnemy = new Enemy (100 , 0 , 100);
@@ -112,10 +126,10 @@ newEnemy.mainEnemy();
 const newPlayer = new Player (1, 1, 1000, 10);
 newPlayer.mainPlayer();
 
-const newHelper0 = new Helper (0, 125,   250,   1000, 0);
-const newHelper1 = new Helper (0, 500,   1000,  3000, 1);
-const newHelper2 = new Helper (0, 2000,  4000,  6000, 2);
-const newHelper3 = new Helper (0, 6000,  12000, 9000, 3);
+const newHelper0 = new Helper (0, 125,   50,   1000, 0);
+const newHelper1 = new Helper (0, 500,   250,  3000, 1);
+const newHelper2 = new Helper (0, 2000,  1000,  6000, 2);
+const newHelper3 = new Helper (0, 6000,  3000, 9000, 3);
 
 let array = [newHelper0, newHelper1, newHelper2, newHelper3];
 Helper.helperLoop();
@@ -129,17 +143,17 @@ for (let i = 0; i < 4; i++) {
     }
 } 
 
-setInterval(helperTick, 10000);
+class Buff {
+    constructor (price,timer) {
+
+    }
+}
+
+setInterval(helperTick, 1000);
 
 function helperTick () {
-    for (let i = 0; i < 4; i++) {
-        if (array[i].lvl > 0) {
-            newEnemy.life -= array[i].dmg;
-            newPlayer.gold += array[i].gold;
-            newPlayer.mainPlayer();
-            newEnemy.mainEnemy();
-        }
-    }
+    Helper.helperTickDmg();
+    console.log("activo");
 }
 
 let clickLvlUp = document.getElementById('playerBoost');
@@ -179,7 +193,7 @@ function playerDmg () {
         clearInterval(playerBoostButtonIntervalId)
     }
 }
-
+/*
 const attackButton = document.querySelector('#attack')
   const attackButtonIntervalId = setInterval(() => {
     attackButton.click()
@@ -188,4 +202,4 @@ const attackButton = document.querySelector('#attack')
   const playerBoost = document.querySelector('#playerBoost')
   const playerBoostButtonIntervalId = setInterval(() => {
     playerBoost.click()
-  })
+  })*/
