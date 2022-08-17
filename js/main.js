@@ -58,7 +58,7 @@ class Player {
     }
     playerBoost () {
         this.lvl += 1;
-        this.dmg += Math.round((Math.pow(this.lvl , 2 )));
+        this.dmg = Math.round((Math.pow( this.lvl , 3.25 )));
 
         this.gold -= this.price;
         this.price += Math.round((this.price / 2) * 0.3);
@@ -105,6 +105,7 @@ class Helper extends Player{
         this.price *= 3;
         newPlayer.mainPlayer();
         Helper.helperLoop();
+        newBuff.buffButton();
     }
     static helperLoop () {
         for (let i = 0; i < 4; i++) {
@@ -141,33 +142,96 @@ class Buff {
         const buffNameDuration = document.getElementById("durationx2Time");
             buffNameDuration.textContent = "Instant";
     }
+    mainBuffButtonView () {    
+        const buffPriceDmg = document.getElementById("dmgx2Price");
+            buffPriceDmg.textContent = "Price " + this.price;
+            buffPriceDmg.addEventListener('click', dmgX2);
+        const buffPriceGold = document.getElementById("goldx2Price");
+            buffPriceGold.textContent = "Price " + this.price;
+            buffPriceGold.addEventListener('click', goldX2);
+        const buffPriceAuto = document.getElementById("autox2Price");
+            buffPriceAuto.textContent = "Price " + this.price;
+            buffPriceAuto.addEventListener('click', autoX2);
+        const buffPriceDuration = document.getElementById("durationx2Price");
+            buffPriceDuration.textContent = "Price " + this.price;
+            buffPriceDuration.addEventListener('click', durationX2);
+            this.buffButton();
+    }
     mainBuff (active) {
-        if (active == 1) {
-            const buffTimer = document.getElementById("dmgx2Time");
-            this.mainBuffTimer(buffTimer);
+        switch (active) {
+            case 1: {
+                const buffTimer = document.getElementById("dmgx2Time");
+                const buffPrice = document.getElementById("dmgx2Price");
+                let newBuffCost = this.price * newPlayer.lvl;
+                this.mainBuffTimer(buffTimer);
+                this.mainBuffButton(buffPrice,newBuffCost);
+                this.buffButton();
+              break;
+            }
+            case 2: {
+                const buffTimer = document.getElementById("goldx2Time");
+                const buffPrice = document.getElementById("goldx2Price");
+                let newBuffCost = (this.price * newPlayer.lvl) / 2;
+                this.mainBuffTimer(buffTimer);
+                this.mainBuffButton(buffPrice,newBuffCost);
+                this.buffButton();
+              break;
+            }
+            case 3: {
+                const buffTimer = document.getElementById("autox2Time");
+                const buffPrice = document.getElementById("autox2Price");
+                let newBuffCost = (this.price * (newPlayer.lvl * 4)) / 2;
+                this.mainBuffTimer(buffTimer);
+                this.mainBuffButton(buffPrice,newBuffCost);
+                this.buffButton();
+              break;
+            }
+            case 4: {
+                const buffPrice = document.getElementById("durationx2Price");
+                let newBuffCost = (Math.pow(this.price , 1.18) * newPlayer.lvl);
+                this.mainBuffButton(buffPrice,newBuffCost);
+                this.buffButton();
+              break;
+            }
         }
-        if (active == 2) {
-            const buffTimer = document.getElementById("goldx2Time");
-            this.mainBuffTimer(buffTimer);
-        }
-        if (active == 3) {
-            const buffTimer = document.getElementById("autox2Time");
-            this.mainBuffTimer(buffTimer);
+    }
+    mainBuffButton (buffPrice , newBuffCost) {
+            let newBuffPrice = this.price;
+            newPlayer.gold -= this.price;
+            newBuffPrice = Math.round(newBuffCost);
+            buffPrice.textContent = "Price " + newBuffPrice;
+            this.buffButton();
+    }
+    buffButton() {
+        let checkButton = [
+                document.getElementById("dmgx2Price"),
+                document.getElementById("goldx2Price"),
+                document.getElementById("autox2Price"),
+                document.getElementById("durationx2Price")
+        ];
+        for (let i = 0; i < 4; i++) {
+            const buffPrice = checkButton[i];
+                if (newPlayer.gold >= this.price) {
+                    buffPrice.disabled = false;
+                } else {
+                    buffPrice.disabled = true;
+                }
         }
     }
     mainBuffTimer (buffTimer) {
         let second = this.timer/1000;
-        let timer = setInterval(function dmgTimer () {
+        let reset = second;
+
+        let timer = setInterval(function dmgTimer (save) {
             second -= 1;
             if (second == 0) {
                 clearInterval(timer);
-                second = 30;
+                second = reset;
             }
             buffTimer.textContent = "Duration " + second;
         }, 1000);
     }
     buffDmg () {
-        let previousPlayerDmg = newPlayer.dmg;
         let previousHelperDmg = [];
 
         newPlayer.dmg *= 2;
@@ -182,7 +246,7 @@ class Buff {
         setTimeout(rollback, this.timer);
 
         function rollback() {
-            newPlayer.dmg = previousPlayerDmg;
+            newPlayer.dmg = Math.round((Math.pow(newPlayer.lvl , 3.25 )));
             newPlayer.mainPlayer();
             for (let i = 0; i < 4; i++) {
                 newHelper[i].dmg = previousHelperDmg[i];
@@ -221,7 +285,7 @@ class Buff {
         const attackButton = document.querySelector('#attack')
             const attackButtonIntervalId = setInterval(() => {
                 attackButton.click()
-            }, 1000);
+            },750);
 
         setTimeout(rollback, this.timer);
 
@@ -232,6 +296,7 @@ class Buff {
     buffDuration () {
         this.timer *= 2;
         this.mainBuffView();
+        newPlayer.mainPlayer();
     }
 }
 
@@ -241,7 +306,7 @@ newEnemy.mainEnemy();
 /* ---------- Enemy ---------- */
 
 /* ---------- Player ---------- */
-const newPlayer = new Player (1, 1, 1000, 10);
+const newPlayer = new Player (1, 1, 0, 10);
 newPlayer.mainPlayer();
 
 let clickLvlUp = document.getElementById('playerBoost');
@@ -252,6 +317,19 @@ function playerLvlUp () {
     newPlayer.playerBoost();
 }
 
+/* Test Zone */
+//This Test Code is made by WebWizardX
+/*
+const attackButton = document.querySelector('#attack')
+  const attackButtonIntervalId = setInterval(() => {
+    attackButton.click()
+})
+  
+const playerBoost = document.querySelector('#playerBoost')
+  const playerBoostButtonIntervalId = setInterval(() => {
+    playerBoost.click()
+})*/
+
 let clickDmg = document.getElementById('attack');
 clickDmg.addEventListener('click', playerDmg);
 
@@ -261,6 +339,7 @@ function playerDmg () {
     newPlayer.mainPlayer();
     newEnemy.mainEnemy();
     Helper.helperLoop();
+    newBuff.buffButton();
     if (newEnemy.stage == 100) {
         clearInterval(attackButtonIntervalId)
         clearInterval(playerBoostButtonIntervalId)
@@ -296,13 +375,10 @@ setInterval(function helperTick () {
 /* ---------- Helper ---------- */
 
 /* ---------- Buff ---------- */
-const newBuff = new Buff (1000 , 30000);
+const newBuff = new Buff (2500 , 30000);
 newBuff.mainBuffView();
+newBuff.mainBuffButtonView();
 let active = "";
-
-let clickBuffDx2 = document.getElementById('dmgx2Price');
-clickBuffDx2.textContent = "Activate";
-clickBuffDx2.addEventListener('click', dmgX2);
 
 function dmgX2 () {
     active = 1;
@@ -310,19 +386,11 @@ function dmgX2 () {
     newBuff.buffDmg();
 }
 
-let clickBuffGx2 = document.getElementById('goldx2Price');
-clickBuffGx2.textContent = "Activate";
-clickBuffGx2.addEventListener('click', goldX2);
-
 function goldX2 () {
     active = 2;
     newBuff.mainBuff(active);
     newBuff.buffGold();
 }
-
-let clickBuffAx2 = document.getElementById('autox2Price');
-clickBuffAx2.textContent = "Activate";
-clickBuffAx2.addEventListener('click', autoX2);
 
 function autoX2 () {
     active = 3;
@@ -330,23 +398,9 @@ function autoX2 () {
     newBuff.buffAuto();
 }
 
-let clickBuffDtx2 = document.getElementById('durationx2Price');
-clickBuffDtx2.textContent = "Activate";
-clickBuffDtx2.addEventListener('click', durationX2);
-
 function durationX2 () {
+    active = 4;
     newBuff.mainBuff(active);
     newBuff.buffDuration();
 }
 /* ---------- Buff ---------- */
-
-/*
-const attackButton = document.querySelector('#attack')
-  const attackButtonIntervalId = setInterval(() => {
-    attackButton.click()
-  })
-  
-  const playerBoost = document.querySelector('#playerBoost')
-  const playerBoostButtonIntervalId = setInterval(() => {
-    playerBoost.click()
-  })*/
