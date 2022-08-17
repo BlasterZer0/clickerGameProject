@@ -15,13 +15,10 @@ class Enemy {
     }
     restoreLife () {
         if (this.life <= 0) {
-            this.restore += Math.round(((this.restore) / 2) * 0.35);
+            this.restore += Math.round(((this.restore) / 2) * 0.55);
             this.life = this.restore;
             this.stage++;
             this.mainEnemy();
-            if (this.stage == 50) { 
-                this.restore *= 2;
-            }
         }
     }
 }
@@ -58,7 +55,7 @@ class Player {
     }
     playerBoost () {
         this.lvl += 1;
-        this.dmg = Math.round((Math.pow( this.lvl , 3.25 )));
+        this.dmg = Math.round((Math.pow( this.lvl , 4 )));
 
         this.gold -= this.price;
         this.price += Math.round((this.price / 2) * 0.3);
@@ -105,7 +102,6 @@ class Helper extends Player{
         this.price *= 3;
         newPlayer.mainPlayer();
         Helper.helperLoop();
-        newBuff.buffButton();
     }
     static helperLoop () {
         for (let i = 0; i < 4; i++) {
@@ -142,7 +138,7 @@ class Buff {
         const buffNameDuration = document.getElementById("durationx2Time");
             buffNameDuration.textContent = "Instant";
     }
-    mainBuffButtonView () {    
+    mainBuffButtonView () {   
         const buffPriceDmg = document.getElementById("dmgx2Price");
             buffPriceDmg.textContent = "Price " + this.price;
             buffPriceDmg.addEventListener('click', dmgX2);
@@ -155,42 +151,43 @@ class Buff {
         const buffPriceDuration = document.getElementById("durationx2Price");
             buffPriceDuration.textContent = "Price " + this.price;
             buffPriceDuration.addEventListener('click', durationX2);
-            this.buffButton();
     }
     mainBuff (active) {
         switch (active) {
             case 1: {
                 const buffTimer = document.getElementById("dmgx2Time");
                 const buffPrice = document.getElementById("dmgx2Price");
+                buffPrice.disabled = true;
                 let newBuffCost = this.price * newPlayer.lvl;
-                this.mainBuffTimer(buffTimer);
+                this.mainBuffTimer(buffTimer,buffPrice);
                 this.mainBuffButton(buffPrice,newBuffCost);
-                this.buffButton();
               break;
             }
             case 2: {
                 const buffTimer = document.getElementById("goldx2Time");
                 const buffPrice = document.getElementById("goldx2Price");
+                buffPrice.disabled = true;
                 let newBuffCost = (this.price * newPlayer.lvl) / 2;
-                this.mainBuffTimer(buffTimer);
+                this.mainBuffTimer(buffTimer,buffPrice);
                 this.mainBuffButton(buffPrice,newBuffCost);
-                this.buffButton();
               break;
             }
             case 3: {
                 const buffTimer = document.getElementById("autox2Time");
                 const buffPrice = document.getElementById("autox2Price");
+                buffPrice.disabled = true;
                 let newBuffCost = (this.price * (newPlayer.lvl * 4)) / 2;
-                this.mainBuffTimer(buffTimer);
+                this.mainBuffTimer(buffTimer,buffPrice);
                 this.mainBuffButton(buffPrice,newBuffCost);
-                this.buffButton();
               break;
             }
             case 4: {
+                const buffTimer = document.getElementById("durationx2Price");
                 const buffPrice = document.getElementById("durationx2Price");
+                buffPrice.disabled = true;
                 let newBuffCost = (Math.pow(this.price , 1.18) * newPlayer.lvl);
+                this.mainBuffTimer(buffTimer,buffPrice);
                 this.mainBuffButton(buffPrice,newBuffCost);
-                this.buffButton();
               break;
             }
         }
@@ -200,33 +197,29 @@ class Buff {
             newPlayer.gold -= this.price;
             newBuffPrice = Math.round(newBuffCost);
             buffPrice.textContent = "Price " + newBuffPrice;
-            this.buffButton();
     }
-    buffButton() {
-        let checkButton = [
-                document.getElementById("dmgx2Price"),
-                document.getElementById("goldx2Price"),
-                document.getElementById("autox2Price"),
-                document.getElementById("durationx2Price")
-        ];
-        for (let i = 0; i < 4; i++) {
-            const buffPrice = checkButton[i];
-                if (newPlayer.gold >= this.price) {
-                    buffPrice.disabled = false;
-                } else {
-                    buffPrice.disabled = true;
-                }
-        }
+    buffButton(buffPrice) {
+        let timer = setTimeout(function dmgTimer () {
+            newBuff.buffButton(buffPrice);
+        }, 1000);
+        
+        if (newPlayer.gold >= this.price) {
+            buffPrice.disabled = false;
+            clearTimeout(timer);
+        } else {
+            buffPrice.disabled = true;
+        }     
     }
-    mainBuffTimer (buffTimer) {
+    mainBuffTimer (buffTimer,buffPrice) {
         let second = this.timer/1000;
         let reset = second;
-
-        let timer = setInterval(function dmgTimer (save) {
+        
+        let timer = setInterval(function dmgTimer () {
             second -= 1;
             if (second == 0) {
                 clearInterval(timer);
                 second = reset;
+                newBuff.buffButton(buffPrice);
             }
             buffTimer.textContent = "Duration " + second;
         }, 1000);
@@ -246,7 +239,7 @@ class Buff {
         setTimeout(rollback, this.timer);
 
         function rollback() {
-            newPlayer.dmg = Math.round((Math.pow(newPlayer.lvl , 3.25 )));
+            newPlayer.dmg = Math.round((Math.pow(newPlayer.lvl , 4 )));
             newPlayer.mainPlayer();
             for (let i = 0; i < 4; i++) {
                 newHelper[i].dmg = previousHelperDmg[i];
@@ -339,7 +332,6 @@ function playerDmg () {
     newPlayer.mainPlayer();
     newEnemy.mainEnemy();
     Helper.helperLoop();
-    newBuff.buffButton();
     if (newEnemy.stage == 100) {
         clearInterval(attackButtonIntervalId)
         clearInterval(playerBoostButtonIntervalId)
